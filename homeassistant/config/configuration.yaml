@@ -1,0 +1,638 @@
+
+# Configure a default setup of Home Assistant (frontend, api, etc)
+default_config:
+
+http:
+  use_x_forwarded_for: true
+  trusted_proxies: 
+    - 192.168.0.9
+    - 172.17.0.1
+
+# Text to speech
+tts:
+  - platform: google_translate
+
+api:
+
+group: !include groups.yaml
+automation: !include automations.yaml
+script: !include scripts.yaml
+scene: !include scenes.yaml
+frontend:
+  themes: !include_dir_merge_named themes
+
+shelly:
+  host_ip: 127.0.0.1
+  username: !secret shelly_user
+  password: !secret shelly_pass
+  discovery: true
+  version: true
+  sensors:
+    - rssi
+    - rssi_level
+    - uptime
+    - mqtt
+    - switch
+  attributes:
+    - ip_address
+    - shelly_type
+    - shelly_id
+    - ssid
+    - rssi
+    - rssi_level
+    - uptime
+    - has_firmware_update
+    - latest_fw_version
+    - firmware_version
+    - mqtt_connected
+    - switch
+  devices:
+    - id: 'F4CFA276866C'
+      light_switch: true
+      name: 'Schlafzimmer'
+    - id: 'D47E00'
+      light_switch: true
+      name: 'Schlafzimmer (Bett)'
+    - id: '6CC2EE'
+      light_switch: true
+      name: 'Salinghi'  
+    - id: 'F3D942'
+      light_switch: true
+      name: 'Kinderzimmer'
+    - id: 'F4CFA2747B48'
+      light_switch: true
+      name: 'Kinderzimmer (Bett)'
+    - id: 'f417d5'
+      light_switch: true
+      name: 'Küche'
+    - id: 'E098068DA1FF'
+      light_switch: true
+      name: 'Küche (Tisch)'
+    - id: '500291F09224'
+      light_switch: true
+      name: 'Wohnzimmer (vorne / links)'
+    - id: '8CAAB5056511'
+      light_switch: true
+      name: 'Wohnzimmer (vorne / rechts)'
+    - id: '500291F04C3D'
+      light_switch: true
+      name: 'Wohnzimmer (hinten / links)'
+    - id: '500291F0ACC4'
+      light_switch: true
+      name: 'Wohnzimmer (hinten / rechts)'
+    - id: '500291F09B45'
+      light_switch: true
+      name: 'WC'
+    - id: '8CAAB5061B06'
+      light_switch: true
+      name: 'Bad'
+    - id: '8CAAB5061B0A'
+      light_switch: true
+      name: 'Dusche'
+    - id: '8CAAB50612F1'
+      light_switch: true
+      name: 'Esszimmer'
+    - id: 'E098068DA0F0'
+      light_switch: true
+      name: 'Eingang'
+    - id: 'F4CFA2768285'
+      light_switch: true
+      name: 'Gang'
+    - id: '98F4ABF3306C'
+      light_switch: false
+      name: 'Beamer'
+    - id: '98F4ABF32F21'
+      light_switch: false
+      name: 'Ventilator'
+  
+    - id: '98CDAC2C7F89'
+      light_switch: false
+      name: 'Terra left 1'
+    - id: 'C45BBE78138F'
+      light_switch: false
+      name: 'Terra left 2'
+    - id: 'C45BBE779818'
+      light_switch: false
+      name: 'Terra left 3'
+    - id: '98CDAC2C6EF5'
+      light_switch: false
+      name: 'Terra right 1'
+    - id: '98CDAC2C8D01'
+      light_switch: false
+      name: 'Terra right 2'
+    - id: '98CDAC2BA572'
+      light_switch: false
+      name: 'Terra right 3'
+
+camera:
+  - platform: xiaomi_cloud_map_extractor
+    host: 192.168.0.238
+    token: !secret xiaomi_miio_roborock_token
+    username: !secret xiaomi_cloud_user
+    password: !secret xiaomi_cloud_pass
+    draw: ['all']
+    attributes:
+      - calibration_points
+
+remote:
+  - platform: xiaomi_miio
+    name: 'Wohnzimmer'
+    host: 192.168.0.121
+    token: !secret xiaomi_miio_remote_token
+    slot: 1
+    timeout: 30
+    commands:
+      beamer_benq_power:
+        command:
+          - raw:nMxm8wlk0mk1mEsmwAZTScAD+AP4A/gD+AP4A+zGbTEAh5kBD4FPgQeAP4A/gceAh4BHhHeARswgAA==
+      tv_panasonic_power:
+        command:
+          - raw:mc1mkwlkxm8ymEsmk3ADKYABlOQECmU1AQ2ZgFmAf4C/gHnOAF/Av8BdZjMgKLAH8DhwQPAX8LHwgYCR8BfwF/AHqYzKbBI6IXAWcA1wBX4GfhTSB2oImgdsCJ4L0zCAAA==
+      tv_panasonic_picture:
+        command:
+          - raw:mc1m8wlkxm05mEsmswmEsmYBhADnMZlNQENAH8AfwB/mc4AX8GDwYPAH8AfwB/BQ+ZTQBBpsBB4A/AP+AP4A/g0eFz4PMgY+AP4INzQAwpmLqwKUAERMIAA=
+      tv_panasonic_tv:
+        command:
+          - raw:mc1m8wlkxm04mEsmswmEsmYBhADnMZlNQENmc2AH4BdwB/AH8AfwYPAY8AfwgPAX8FDwEPBB8AfwSfAH8AfwWKmMymgEPgU+EF4DHgQ+AhMwgAA=
+      tv_panasonic_av:
+        command:
+          - raw:mc1nEwlkxmwAhTWYTCWTObADrMZlNAENAH+ZzcBfwH/An8A/QYPAH8AfwB/BY8FCgefAH8AfwB+mMymoLPgIcAP4A/gYSCl4NfgD+BREwgA=
+      tv_panasonic_menu:
+        command:
+          - raw:mc1m8wlkxm04mEsmswmEsmc2AHWYzKagIMA6QA7zScgH6AP4A/gD+APYMHgD+AP4A/gD+Ch4A/gD+AP4A/goeAx4lmzQCnhTWBC8ELwELBCYBmJhAA==
+      tv_panasonic_txt:
+        command:
+          - raw:mc1nEwlkxmwAhTWYzCWTObADlMAECmU0AIWZzcAdgGGAHwDCgB/AH8EfwYPAH0FgwF/AH8AfpjMpqARwQXgD+AP4TWhBEFH4A/gD+AP4RVB+2Jq4nviK3MIA
+      tv_panasonic_sttl:
+        command:
+          - raw:mc1nEwlkxm05mEsmswmEsmc2AHWYzKaAINNwB/AH8AfwB/AH8GB5qAQUxBxkAfwB/AHwDdwB6CxUAiAMbB6cEHwWfD78KvQKfAH8AfwUfAY8AfwKMmEA
+      tv_panasonic_list:
+        command:
+          - raw:mc1nEwlkxmwAhTWZzCWTOaADlMAECmU1AIWZzYAfwB/AH8AdpuAv4A+gwLMQEFmgFhTOcgUeCh4C/goeF0YKBAEKBjYA7Bp+C14JXAQeCDYEMBjQAjQHngD+DL4Kvg3zMIAA
+      tv_panasonic_info:
+        command:
+          - raw:mc1mkwlkxm8ymEsmk3ADKYTCWTUAMpjMpqAhM0nMwlkzALMAfwB2AwMAfwB/A38GDwUPAH8B/wB/BQUBjwB/BA8BfwSNnAA+gMQF2oYjgh+CH4DCghxNgTPBMcDv5ZMIAA==
+      tv_panasonic_exit:
+        command:
+          - raw:mc1nEwlkxmwAhTWYzCWTObADlMAECmU0AIUBBwB/AHQDCgB/AH8AfwYFBAObgMMAPYC/gH+AP4KCTUGngIHCB8AfwL+CZgQOQSeAY8HuQO/Ar8DPwVdAQ6YQAA==
+      tv_panasonic_home:
+        command:
+          - raw:mc1m8wlkxm05mEsmswmEsmYBhADnMZlNQENAH8AeJwAv4A/gX+DB4EHgDvNgF/AX8LHwUGBZ8CHwGPAH8CjwEPAQ0I3gKfDv8AjwQ/mgAZgFkAecwgA=
+      tv_panasonic_netflix:
+        command:
+          - raw:mc1m8wlkxm05mEsmswmEsmc4AHWYzKagIMA6QA7zQCQgD7AH8AfwB/AHsGDwB/AH8AfwB/BQKaAs+BD4DHzObAUeBh4GHgMeAR4BHgi+Az4BHhiQBW8wgAA=
+      tv_panasonic_guide:
+        command:
+          - raw:mc1nEwlkxmwAhTWYzCWTObADlMAECmU0AIUBBwB0AgqZzcB/wB/AH8AfQYJBIcAewaDAX8AfwB+mMymoLPhVcDl4SfhN+Cn4FXgD+BR4Jfgl+B34A/zCAA==
+      tv_panasonic_up:
+        command:
+          - raw:mc1nEwlkxmwAhTWYzCWTObADlMAECmU0AIUBB5nNwD6AooAfwH/AX8GDwKPAo8AfwB/AvgFBQODCpcAcwD3AX8AfwL/ChSahE0DDAUXhlwFn4DGAp4F74FNgERMIAA==
+      tv_panasonic_left:
+        command:
+          - raw:mc1nEwlkxmwAhTWYTCWTObgDlMQECmU1AQabAD+AP4GCgH+Af4B/zGZTQEjwB/AH8AfwWNBQUGnwB/AH8EjwF6ChgQtQs4Aq8Hvw5fFPoPfwMoAq0AhphAA=
+      tv_panasonic_right:
+        command:
+          - raw:mc1nEwlkxmwAhTWYTCWTObADlMQECmU0AIUBBAGHAH8AfwB/AH8AegYPAH8ImAF/Af8FDQGDm4A/gD+AP4A+zGZTUKLgWoBj8DPwjfFIsESgK+DB8AiZhAA=
+      tv_panasonic_down:
+        command:
+          - raw:mc1nEwlkxmwAhTWYzCWTObADrMZlNACCmACDAD+AP4A/gD+AP4A5AweAP4A8zcA+goXAP8FDAMHAH8AfwB/AHaYzKago+DF4UfgMKEYYIfgZeAh4DHi9IB2YBBTCAA==
+      tv_panasonic_ok:
+        command:
+          - raw:mc1nEwlkxmwAhTWYTCWTObgDrMZlNQENmc2AP8BfwB/Af8GDwYHBI8DjwB/An8FDwGPAH8AfwB/CZ8BipoFF4DHgIQEX4Lfhm+CFAEMTCAA=
+      tv_panasonic_option:
+        command:
+          - raw:mc1m8wlkxm05mEsmgBBTSYADrMZlOJhLJqAYUzAUMBhwJCAPwAfwH/APcAfwBymMymoGHgH+Av4B/hY+FiQLKzYCHwcrAQYNvwSvAgQKSAU9BboSfQKXBcsJdQCPAz4QuwXamEAA
+      tv_panasonic_return:
+        command:
+          - raw:mc1nEwlkxmwAhTWYTCWTObgDrMZlNAEGmwA/gD8BgwA/gT+Av4MEgYeAf4A5zEFDwB/BQOahE+AP4A/gD+AP4LHg0+BD4angQ+K/4h/gIZMIAA==
+      tv_panasonic_red:
+        command:
+          - raw:mc1m8wlkxm04mEsmswmEsmYBhADnMZlNQENAH+ZzYBfwB/An8GDwYPAw8BfwB/BQ8FDwB/mYcRTScgDqAv4A/gf+AvcxmQULA4wAQgLSAVEAO4IXgDuA+YGCi7nMglGAR+YSyYQA
+      tv_panasonic_green:
+        command:
+          - raw:mc1nEwlkxmwAhTWYTCWTObgDrMZlNAEGmwA/gD+BxoA/gT+AO4MEgYeAP4A9zEBfwsbmoSPg8+AP4A/hM+CR4EHg5QD3In3gd+CHIHXgEUB20wgA
+      tv_panasonic_yellow:
+        command:
+          - raw:mc1nEwlkxmwAhTWYTCWTObgDrMZlNQENmc2AP4BfwH/AP8CfgYPAH8DDwH/Af8FCgMPBI8AfwJ/EC8CCBI2AYgAjwS/AY8FzwCPAIeaAELMIAA==
+      tv_panasonic_blue:
+        command:
+          - raw:mc1nEwlkxmwAhTWYTCWTObADlMQECmU0AQoAfwB/AwIBfwH/AX8GDwKPAH8CfwL/BQYBA5uAPQGBgD+APYE/gkJNQovB64BiAc4B8kI3wGdAh8CFQb8AzuYQAA==
+      tv_panasonic_volume_up:
+        command:
+          - raw:mc1m8wlkxm05mEsmgAZTMAwpoAgcynABCzSYAD+BRoB+AL+Av4C7TUAMpjMpqAQoEEA4GAP4A7AToAf4KHgoWAP4A/gD+ERgC/gD+AOwOHgD+AP4A/ggeAgc0AIWYQA=
+      tv_panasonic_volume_down:
+        command:
+          - raw:mc1mkwlkxm8ymEsmk3ADKYABlNgECmU4AIKczCWTMAcwGHAH8CggD/AH8DfwYNAQOYgD+DxQIBgH+BPYB9TGZASEET4B/gD+BP4TOggeBR4keAo0Ax4VfgHwFn4HLAEFMIAA
+      tv_panasonic_volume_mute:
+        command:
+          - raw:mc1nEwlkxmwAhTWYzCWTObgDlMAECmU1AIWZzYAegIDAP8A+wB/AHsFhgD3mMymgFHgD+AP4KHgoeCh4A/gD+AP4A/AoSDS4jfg5eAP4EDCS+BzYJagQuAOQGUTCAA==
+      tv_panasonic_channel_up:
+        command:
+          - raw:mc1nEwlkxmwAhTWYTCWTObgDrMZlNQCCmICBTYBhgB/AH8AfwB3BQYA/5jMpoDB4A/gD+AP4A+goKDjYA/gceAP4A/gsQIUYjfg5aB14IXghQAh4DPgITMIA
+      tv_panasonic_channel_down:
+        command:
+          - raw:mc1m8wlkxm04mEsmswmEsmYBhADnMZlNAEGmwA/gUaAPAD/gD+BPwMEgkeAP4A/gD+FjE1B58IHwB/AH8EjwqoAQcRzwGfAy8O7wEPBD8BDZhAA=
+      tv_panasonic_0:
+        command:
+          - raw:mc1nEwlkxmwAhTWYzCWTObADlMAECmU0AIUBBwB8AocDCgH/AX8AfwYFAo8EDwF/AX8BegsZm4A/gD+APQKBgH8H14WXhd+BT4EGA59MZlNQZPA68Bh5hAA=
+      tv_panasonic_1:
+        command:
+          - raw:mc1nEwlkxmwAhTWYzCWTObgDlMAECmU1AIWZzYAfwKGAHsB/wB/A38GBJoCR4FHggeA/4C+goKBR4A/g4eA/4A/gb+AOQNEiVsAOgKFgL2AP4rfhheAQkwgA
+      tv_panasonic_2:
+        command:
+          - raw:mc1nEwlkxmwAhTWYTCWTObgDrMZlNQEGmwDGgHwAP4A5zEBfwB/BguaAYeAP4A/hEeDxoKChE+Af4C/gH+EzgNJgDuI34HPgg+Dl4fngg+Ax0wgA
+      tv_panasonic_3:
+        command:
+          - raw:mc1nEwlkxm05mEsmsxmEsmc2AHWYzKaAEFMAECm4A/gD+BwwC/gD+AP0xmU1BxoBgwB/AHcDhwF/AHsLGAUPAgoBfwF8Af8KFAULAgoBiQ2/ET4ONQcvBBgBjwxLmEAA
+      tv_panasonic_4:
+        command:
+          - raw:mc1nEwlkxmwAhTWYTCWTObADrMZlNAENAH8AfwB/mc3AH8GD5qBB4A/gDzNAAzALIBfwB7BQ8DjwMPAH8EjZpOQUfBRcBhwCDmYmpAD+BAocpAU6B0wIUgQmE6wA8AMXMIAA
+      tv_panasonic_5:
+        command:
+          - raw:mc1mkwlkxm8ymEsmk3ADKYABlNgECmU4AQoAfwICAH8AfwB/AH8GCZiAGU5mEsmYB5gQGAeYA7gPuAv4A7gb1MZkAYQNPgD+GD4A/gT+FTIXXgk+AP4IPhl4FWoIPgU3MIAA
+      tv_panasonic_6:
+        command:
+          - raw:mc1nEwlkxmwAhTWYzCWTObgDrMZlNAEGmwA9TAA/wB/AH8AfwB5BgUBB5mAOQB9gD+ER4D/goYGEYEHgD+AP4JHgkXMZlNQIfCr8ELwIMFOgFPwOvA6yYQA=
+      tv_panasonic_7:
+        command:
+          - raw:mc1mkwlkxm8ymEsmk3ADKYABlNgECmU4AIKczCWTMAcwGDmIDCgD4A/4B7gT+AP4MCAWEDjAJFhAsAOgB7gD+BP4H5TGZAGGAx4A/gD+AP4YNCBQCzIXfgZeCl4IXheyAyoVtgtmAxcwgAA=
+      tv_panasonic_8:
+        command:
+          - raw:mc1nEwlkxmwAhTWYzCWTObgDrMZlNQEGmwA9TAA/gB/Af8A9wB/AHKYzKaAgeCB4C/gH+BPoKHgD+AP4KHhM+IHQLXgIcEZ4EFgh+DN4Q/gU3MIA
+      tv_panasonic_9:
+        command:
+          - raw:mc1nEwlkxmwAhTWYTCWTObADrMZlNACCmICEgD+AOgD/gD+BP4MHgMJNwGGAH8AfwB/AHMD9wByCx0AfwkfAH8Cf5mAOQJ5hY+ARgJPgk+Af4UUTGZTUKPwIemEA
+      tv_panasonic_help:
+        command:
+          - raw:mc1nEwlkxmwAhTWYzCWTObgDlMAECmU1AIWZzYAdgGGAPgBfwD/APMFAwL/AHYGDwB/AH8AfwB/BQKaAMeAP4A/gD+AP4LHBZeAh4QfgMeIcYGXgMyBl8wgA
+      tv_panasonic_last_view:
+        command:
+          - raw:mc1nEwlkxmwAhTWYTCWTObgDrMZlNQEGmwA/gDlMQD/An8AfwL/BgOaAMeCh4C/gD+APoKCgcOCB4A/gD+Ez4geAtaAhADOCbmD5QHagm6CJ4CDhc+BnMwgA
+      tv_panasonic_backward:
+        command:
+          - raw:mc1nEwlkxmwAhTWYzCWTObgDlMAECmU1AQabAIKAP4A+AT+Av4C/gwJNAIKAH8DDwF/AH8FCACLDLQNNwByBy8FrwB/Ba8DDwIPBisGvQIvBE8RHhg2mEAA=
+      tv_panasonic_play:
+        command:
+          - raw:mc1nEwlkxmwAhTWYzCWTObADlMAECmU0AIUBBwB/AHQDCgB/Af8AfwYFAgObgMMAPYC/gD+A/4B5AoQF14OXhR+AP4HHgD+B/4PWTUIPwg/CD8EPw14mEAA=
+      tv_panasonic_forward:
+        command:
+          - raw:mc1nEwlkxmwAhTWYTCWTObADlMQECmU0AIUBBAGHAH8B/wD/AH8GDwGPAH8FjwYPBQ8AhpqBj4afgpeClwJVAYvNwIWAH8Adgc4E38HTwU/AHoLf5ZMIAA==
+      tv_panasonic_back:
+        command:
+          - raw:mc1m8wlkxm05mEsmsxmEsmc2AHWYzKaAEFMAECAdIAfwB4AwMA/wB/A38AdpjMpqDjQDBgD+AP4A/gD8FioXWAQ+BC4RfgD+F34VcAtQCVILfgV+BF4CHgiaInYA5TCAAA==
+      tv_panasonic_pause:
+        command:
+          - raw:mc1m8wlkxm05mEsmswmEsmYBhADnMZlNQENAH8AfwB/AH8AfwYJmwA/AUOAv4A/gD9MZlNACCmIBFAQ+AxIMRgDuE34TfgD+AP4Pfg90EH4Qfg5+BjkwgAA=
+      tv_panasonic_next:
+        command:
+          - raw:mc1nEwlkxmwAhTWYTCWTObgDrMZlNQEGmwA5TEAdgD3AH8AewQGAX8Af5jMpoAx4A/gD+AP4KHgoMAQoWRhFOGn4HXgD+CDICHgyUCWYEXhseCr4S9AmIEfwO/yyYQA=
+      tv_panasonic_myapp:
+        command:
+          - raw:mc1nEwlkxmwAhTWYTCWTObADrMZlNAEGm4DGgDwAu4D/gH+Av4A7TGZTUBjwB/AH8AfwUPBQcHngypCK8KLwOPBRcQzwGbB04CpZiAh4CBhX+B0gDBAZeAPEwgA=
+      tv_panasonic_stop:
+        command:
+          - raw:mc1nEwlkxmwAhTWYzCWTObADlMAECmU0AIWZzcAfwB/AH8EhgB7Af8GBJqAgwOJg80AP4A/gD+FjoJBBdSBD4ELhV+BRAC/BRqBA4UfiW+AR4IdhC+CJ4T2gINMIAA==
+      tv_panasonic_record:
+        command:
+          - raw:mc1nEwlkxmwAhTWYTCWTObgDrMZlNQEGmwA5TEAdgD3AH8AfwN/AX8GBJoBB4A/gD+Bf4C+goKCzgZbBp+CF4A/hN+C3QOngY+DGwU3ghWC5oIfhb3MIAA==
+      tv_grundig_power:
+        command:
+          - raw:nE2mEsnExADIAdpjN5gAhoA/gD+AOcxm00BB8BlphAA=
+      tv_grundig_menu:
+        command:
+          - raw:nE2mEsnExmEsmM3mABCgIOAP4A/gDnMZtNAEJBBwBmJhAA==
+      tv_grundig_back:
+        command:
+          - raw:nE2mEsnExADIAdpjN5gAhoA/gDnMZtNAKfAZiagMtMIA
+      tv_grundig_tools:
+        command:
+          - raw:nEzmEsADOYzabgEKAH4AaTQBPwNPAU8BmJhAAA==
+      tv_grundig_guide:
+        command:
+          - raw:nEzmEsADuYzabgIVNAB+AksCnAEZAWiYQAA=
+      tv_grundig_up:
+        command:
+          - raw:nEzmEsADOYzabgEKAH4AeTQA/QNEAEkCJwDEmEAA
+      tv_grundig_down:
+        command:
+          - raw:nEzmEsADuYzabgIaAH4FngCUA94AZzCAAA==
+      tv_grundig_left:
+        command:
+          - raw:nEzmEsADOYzabgEKAH4AfgB2BogHOAjfLJhAAA==
+      tv_grundig_right:
+        command:
+          - raw:nE0mEsnEzADmYzabgGMAxwB8AD0BYkxm8wANKYgfUAIkwgA=        
+      tv_grundig_source:
+        command:
+          - raw:nEzmEsnE0mEsmM2m4BBAGGAHYDBAH+AOYFngKeBTMwgA
+      receiver_panasonic_power:
+        command:
+          - raw:mc0nMwlkxm80mEsmk4mEsmYBhADnMZlNgENAH8AfwB0AzOYgD9MgB/AHWYzIEDwQHAw8AcwYPBAgFHwSfAH8AfwB/BZ8BDQCPArsO/gGPAy8GfwO/AISYQA=
+      receiver_panasonic_source_dvd:
+        command:
+          - raw:mc1mMwlkxm4AhTScTCWTOcgDrMZlNgENAH8AfwB/AH8AfwYImgPJgFkBB4A/gD+FD4CHgD+AP4A/gkeAR4BHg2eB54BHgEeAR4J3gDrMIAA=
+      receiver_panasonic_source_bddvd:
+        command:
+          - raw:mc1mMwlkxm4AhTScTCWTOcgDrMZlNgENAH8AfwB/AH8AfwYPAH8AfwB/BA8BDwB/AH8AfwSPBR8AfwIPA68AjwO/AH8Af5ZMIAA=
+      receiver_panasonic_volume_up:
+        command:
+          - raw:mc1mMwlkxm4AhTScTCWTOcgDrMZlNgENAH8AfwB/AH8AfwYPAH8AfwB/BA8BDwB/AH8AfwB/AH8AfwcPAH8AfwB/AH8FDJhAAA==
+      receiver_panasonic_volume_down:
+        command:
+          - raw:mc1mMwlkxm4AhTScTCWTOcgDrMZlNgENAH8AfwB/AH8AfwYPAH8AfwB/BA8BDwB/AH8AfwSPAY8AfwKPAY8BjwB/AH8DjphAAA==
+      receiver_panasonic_volume_mute:
+        command:
+          - raw:mc1mMwlkxm4AhTScTCWTOcgDrMZlNgENAH8AfwB/AH8AfwYPAH8AfwB/BA8BDwB/AH8AfwB/BQ8BjwIfAH8CDwGPAY8Bj5ZMIAA=
+      tvmotion_power:
+        command:
+          - raw:mc1mEsmwAZzcANQDzmcxAHkBfwF4nIAZTQAdQF3AP8FdADymEAA=
+      tvmotion_0:
+        command:
+          - raw:mc1mEsm00ADKcgDqAeczmIA8gL+AvczmYAagP+AP4I/zCAA=
+      tvmotion_1:
+        command:
+          - raw:mc1mEsmwAZzkAMppMJYAeczmIAZTMANZtNwA1APcBf5tNgE/Ar8BOZhAAA==
+      tvmotion_2:
+        command:
+          - raw:mc1mEsmwAZzcANQDzmcxAHmbTkAMpoAv4C8gDmAvYJ7gX+C2cwgA
+      tvmotion_3:
+        command:
+          - raw:mc1mEsmwAZzkAMppMJYAeczmIA8gL/NpsAOUzAPUDdJuAewAdAJ2AWYB7zCAAA==
+      tvmotion_4:
+        command:
+          - raw:mc1mEsmwAZzkAMppMJYAeczmIA8gL+Av4A5gL2Cf4A5zCAA=
+      tvmotion_5:
+        command:
+          - raw:mczmEsm03ADmZzUAMpiAGQC5AN2Ae4C8TYBvwM/AP0Ac5hAA
+      tvmotion_6:
+        command:
+          - raw:mczmEsm03ADmZzUAMpiAPIC/gXmBn4CbgB+A3c2m0wlkwgA=
+      tvmotion_7:
+        command:
+          - raw:mc1mEsm00ADKcgDqAeczmIA8gL+Av4A5gL2APc2ADObgBqAecwgA
+      tvmotion_8:
+        command:
+          - raw:mczmEsm03ADmZzUAMpiAPM2mwC/gLsBnYIZAP+APAL9TCAA=
+      tvmotion_9:
+        command:
+          - raw:mc1mEsmwAZzkAMppMJYAeczmIA8gL+Av4A5gL2AP4A9gjvMIAA==
+      tvmotion_info:
+        command:
+          - raw:mc1mEsm00ADKcgDqAeczmIA8gL+AeYD9gfuA/4K/gHnMIAA=
+      tvmotion_menu_back:
+        command:
+          - raw:mc2mEsm00ADKcgBkAWUzmYAZTEAMpqAOoC6APkAfYD8AVmAGQH7gb2AOYK8AfmC2UwgA
+      tvmotion_guide:
+        command:
+          - raw:mc1mEsm00ADKcgDrM5mAHs2mwAZTcBfwE9ALwEcgC0mAAZAdkAOgK7ATvMIA
+      tvmotion_tv:
+        command:
+          - raw:mc1mEsm00ADKcgDqAeczmIA8gL+AP4D7gD+A/cwgAA==
+      tvmotion_recorder:
+        command:
+          - raw:mczmEsm03ADkA8wA7AX8Cu5tNgL/AD8DfZhAAA==
+      tvmotion_movie:
+        command:
+          - raw:mczmEsm03ADabTCWAHmAHYC/gL2BHgE7AD+A+cwgAA==
+      tvmotion_radio:
+        command:
+          - raw:mc1mEsm00ADKcgDqAeczmIA8gL+AP4D7gD+BvcwgAA==
+      tvmotion_portal:
+        command:
+          - raw:mczmEsm03ADkA8wA7AX8CuwL/AD8D/5hAA==
+      tvmotion_ok:
+        command:
+          - raw:mc1mEsm00ADKcgDqAeczmIA8zabgBrM5mAHoF5gFwBv4G5gPmAfQM6AFmBeUwgA=
+      tvmotion_up:
+        command:
+          - raw:mc2mEsm00ADKcgDrM5qAGUxAHkBfwLzAXeZzMANQN/A38A95hAA=
+      tvmotion_down:
+        command:
+          - raw:mc1mEsm00ADKcgDqAeczmIA8gL+AOkzATKbAHyA/AC7An2AOcwgA
+      tvmotion_left:
+        command:
+          - raw:mczmEsm03ADkA8wA7AX+bTYCPwH+BH8DephAAA==
+      tvmotion_right:
+        command:
+          - raw:mc1mEsm00ADKcgDrM5mAGU2AHaYgJlNwAyAPcAMgJzAXMDcwB3A3QA+gN0AzcB8wAzBHKYQA
+      tvmotion_red:
+        command:
+          - raw:mczmEsm03ADkA8wA7AX8BeJsAv4G/gr/MJZMIAA=
+      tvmotion_green:
+        command:
+          - raw:mc1mEsm00ADKcgDqAeczmIA8gL+AeYD7gX+Bv4E9gHnMIAA=
+      tvmotion_yellow:
+        command:
+          - raw:mc1mEsm00ADKcgDqAeczmIA8gL+AeYD7gbuAfYH/gb3MIAA=
+      tvmotion_blue:
+        command:
+          - raw:mc1mEsm00ADKcgDqAeczmIA8gL+AeczmYAagbuBe4H/gf/MIAA==
+      tvmotion_volume_up:
+        command:
+          - raw:mc1mEsm00ADKcgDqAeczmIA8gL+AeYD9gfoAWYG/AX+DO4A5zCAA
+      tvmotion_volume_down:
+        command:
+          - raw:mc1mEsm00ADKcgDqAeczmIA8gL+AeYD8TMANZsAWYF/gH+AeUwgA
+      tvmotion_mute:
+        command:
+          - raw:mc2mEsm00ADKcgDrM5qAGUxAHkBfJmAWU3AfoA8gE0Af8B9gT7BHOYQA
+      tvmotion_channel_switch:
+        command:
+          - raw:mc2mEsm00ADKcgDrM5qAGUxAHkBfwDzAfsAcwP3AXiZgBsA/0wgA
+      tvmotion_channel_up:
+        command:
+          - raw:mczmEsm03ADkA8wA4mgCZTYBfwA1ATsAuALyATsFf5hAAA==
+      tvmotion_channel_down:
+        command:
+          - raw:mc1mEsm00ADKcgDqAeczmIA8gL+AvYB7zYBMwL+Af8Ac5hAA
+      tvmotion_play_pause:
+        command:
+          - raw:mc1mEsm00ADKcgBlN5hLJnMwA6mIC7APkBOYB7gP2B+gG/gLsAWYDZgvvMIA
+      tvmotion_record:
+        command:
+          - raw:mc1mEsm00ADKcgDqAeczmIA8gL+AvYB7gfuAf8zmYAazYDMwAymEAA==
+      tvmotion_slow:
+        command:
+          - raw:mc1mEsmwAZzkAMppMJYAeczmIA8gL+AvYB7gf2Bf4B5zCAA=
+      tvmotion_replay:
+        command:
+          - raw:mc2mEsm00ADKcgDrM5qAGUxAHkBfwF7mczADUD/wH4AvYBd5hAA=
+      tvmotion_next:
+        command:
+          - raw:mc2mEsm03ADaaTCWTOagBlMQB2mYC7ARkAWYAcAPlNpyBPIG5gH+B/gB7TCAAA==
+      tvmotion_forward:
+        command:
+          - raw:mc1mEsm00ADKcgDqAeczmIA8gL+AvczmYAagfuA+82AjMC/wHymEAA==
+      tvmotion_backward:
+        command:
+          - raw:mc1mEsm00ADKcgDqAeczmIA7TMBMpuAvoE5gPwAOwEaATsA+gG5AB2B+8wgA
+      tvmotion_back:
+        command:
+          - raw:mc2mEsm00ADKcgDrM5qAGUxAHkBdAIymczADWbTcAuQJ3A/sAcwF/mEA
+      tvmotion_txt:
+        command:
+          - raw:mc3mEsm0zmEsm8wAHWZzYAMgCyAXMAcwF4nMwlkyATMAMpkAWU3ATIA9wH7AvMD9wJzBfuYQAA==
+      tvmotion_pip:
+        command:
+          - raw:mc2mEsm00ADKcgDrM5qAGUzADaYgL8AeQA7gLmBO4H7gP2AOYG9gPnMIAA==
+      tvmotion_source:
+        command:
+          - raw:mc2mEsm00ADKcgDrM5qAGUxAHkBfwF7APcB+JmAGwE9AD+BucwgA
+      tvmotion_help:
+        command:
+          - raw:mc2mEsm00ADKcgDrM5qAGUxAHkBfwF7APcD/wN7AHOYQAA==
+
+light:
+  - platform: group
+    name: Wohnzimmer (rechts)
+    entities:
+      - light.shelly_shsw_1_8caab5056511
+      - light.shelly_shsw_1_500291f0acc4
+  - platform: group
+    name: Wohnzimmer (links)
+    entities:
+      - light.shelly_shsw_1_500291f09224
+      - light.shelly_shsw_1_500291f04c3d
+  - platform: group
+    name: Wohnzimmer
+    entities:
+      - light.shelly_shsw_1_500291f09224
+      - light.shelly_shsw_1_8caab5056511
+      - light.shelly_shsw_1_500291f04c3d
+      - light.shelly_shsw_1_500291f0acc4
+
+  - platform: template
+    lights:
+      terra_left_front_left:
+        friendly_name: "Beleuchtung (HN / links)"
+        unique_id: terra_left_front_left
+        value_template: "{{ is_state('switch.shelly_shsw_25_98cdac2c7f89_1', 'on') }}"
+        turn_on:
+          service: switch.turn_on
+          target:
+            entity_id: switch.shelly_shsw_25_98cdac2c7f89_1
+        turn_off:
+          service: switch.turn_off
+          target:
+            entity_id: switch.shelly_shsw_25_98cdac2c7f89_1
+      terra_left_front_middle:
+        friendly_name: "Beleuchtung (HN / mitte)"
+        unique_id: terra_left_front_middle
+        value_template: "{{ is_state('switch.shelly_shsw_25_98cdac2c7f89_2', 'on') }}"
+        turn_on:
+          service: switch.turn_on
+          target:
+            entity_id: switch.shelly_shsw_25_98cdac2c7f89_2
+        turn_off:
+          service: switch.turn_off
+          target:
+            entity_id: switch.shelly_shsw_25_98cdac2c7f89_2
+      terra_left_front_right:
+        friendly_name: "Beleuchtung (HN / rechts)"
+        unique_id: terra_left_front_right
+        value_template: "{{ is_state('switch.shelly_shsw_25_c45bbe78138f_1', 'on') }}"
+        turn_on:
+          service: switch.turn_on
+          target:
+            entity_id: switch.shelly_shsw_25_c45bbe78138f_1
+        turn_off:
+          service: switch.turn_off
+          target:
+            entity_id: switch.shelly_shsw_25_c45bbe78138f_1
+      terra_left_back_left:
+        friendly_name: "Wärmelampe (HN / links)"
+        unique_id: terra_left_back_left
+        value_template: "{{ is_state('switch.shelly_shsw_25_c45bbe78138f_2', 'on') }}"
+        turn_on:
+          service: switch.turn_on
+          target:
+            entity_id: switch.shelly_shsw_25_c45bbe78138f_2
+        turn_off:
+          service: switch.turn_off
+          target:
+            entity_id: switch.shelly_shsw_25_c45bbe78138f_2
+      terra_left_back_right:
+        friendly_name: "UV-Lampe (HN / rechts)"
+        unique_id: terra_left_back_right
+        value_template: "{{ is_state('switch.shelly_shsw_25_c45bbe779818_2', 'on') }}"
+        turn_on:
+          service: switch.turn_on
+          target:
+            entity_id: switch.shelly_shsw_25_c45bbe779818_2
+        turn_off:
+          service: switch.turn_off
+          target:
+            entity_id: switch.shelly_shsw_25_c45bbe779818_2
+
+      terra_right_front_left:
+        friendly_name: "Beleuchtung (KN / links)"
+        unique_id: terra_right_front_left
+        value_template: "{{ is_state('switch.shelly_shsw_25_98cdac2c6ef5_2', 'on') }}"
+        turn_on:
+          service: switch.turn_on
+          target:
+            entity_id: switch.shelly_shsw_25_98cdac2c6ef5_2
+        turn_off:
+          service: switch.turn_off
+          target:
+            entity_id: switch.shelly_shsw_25_98cdac2c6ef5_2
+      terra_right_front_middle:
+        friendly_name: "Beleuchtung (KN / mitte)"
+        unique_id: terra_right_front_middle
+        value_template: "{{ is_state('switch.shelly_shsw_25_98cdac2c6ef5_1', 'on') }}"
+        turn_on:
+          service: switch.turn_on
+          target:
+            entity_id: switch.shelly_shsw_25_98cdac2c6ef5_1
+        turn_off:
+          service: switch.turn_off
+          target:
+            entity_id: switch.shelly_shsw_25_98cdac2c6ef5_1
+      terra_right_front_right:
+        friendly_name: "Beleuchtung (KN / rechts)"
+        unique_id: terra_right_front_right
+        value_template: "{{ is_state('switch.shelly_shsw_25_98cdac2c8d01_2', 'on') }}"
+        turn_on:
+          service: switch.turn_on
+          target:
+            entity_id: switch.shelly_shsw_25_98cdac2c8d01_2
+        turn_off:
+          service: switch.turn_off
+          target:
+            entity_id: switch.shelly_shsw_25_98cdac2c8d01_2
+      terra_right_back_left:
+        friendly_name: "UV-Lampe (KN / links)"
+        unique_id: terra_right_back_left
+        value_template: "{{ is_state('switch.shelly_shsw_25_98cdac2c8d01_1', 'on') }}"
+        turn_on:
+          service: switch.turn_on
+          target:
+            entity_id: switch.shelly_shsw_25_98cdac2c8d01_1
+        turn_off:
+          service: switch.turn_off
+          target:
+            entity_id: switch.shelly_shsw_25_98cdac2c8d01_1
+      terra_right_back_middle:
+        friendly_name: "Wärmelampe (KN / mitte)"
+        unique_id: terra_right_back_middle
+        value_template: "{{ is_state('switch.shelly_shsw_25_98cdac2ba572_2', 'on') }}"
+        turn_on:
+          service: switch.turn_on
+          target:
+            entity_id: switch.shelly_shsw_25_98cdac2ba572_2
+        turn_off:
+          service: switch.turn_off
+          target:
+            entity_id: switch.shelly_shsw_25_98cdac2ba572_2
+      terra_right_back_right:
+        friendly_name: "Wärmelampe (KN / rechts)"
+        unique_id: terra_right_back_right
+        value_template: "{{ is_state('switch.shelly_shsw_25_98cdac2ba572_1', 'on') }}"
+        turn_on:
+          service: switch.turn_on
+          target:
+            entity_id: switch.shelly_shsw_25_98cdac2ba572_1
+        turn_off:
+          service: switch.turn_off
+          target:
+            entity_id: switch.shelly_shsw_25_98cdac2ba572_1

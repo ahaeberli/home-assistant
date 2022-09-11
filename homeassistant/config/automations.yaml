@@ -1,0 +1,493 @@
+- id: '1587845908379'
+  alias: Set theme at startup
+  description: Set theme "Google Dark Theme"
+  trigger:
+  - event: start
+    platform: homeassistant
+  condition: []
+  action:
+  - data:
+      name: Google Dark Theme
+    service: frontend.set_theme
+
+- id: '1606085181124'
+  alias: Terra left Light front-left turn on
+  description: ''
+  trigger:
+  - platform: sun
+    event: sunrise
+  condition: []
+  action:
+  - service: light.turn_on
+    data: {}
+    entity_id: light.terra_left_front_left
+  mode: single
+- id: '1606085204195'
+  alias: Terra left Light front-left turn off
+  description: ''
+  trigger:
+  - platform: sun
+    event: sunset
+    offset: -00:10:00
+  condition: []
+  action:
+  - service: light.turn_off
+    data: {}
+    entity_id: light.terra_left_front_left
+  mode: single
+- id: '1607287935762'
+  alias: Terra left Light front-middle turn on
+  description: ''
+  trigger:
+  - platform: sun
+    event: sunrise
+    offset: +00:05:00
+  condition: []
+  action:
+  - service: light.turn_on
+    data: {}
+    entity_id: light.terra_left_front_middle
+  mode: single
+- id: '1607287970595'
+  alias: Terra left Light front-right turn on
+  description: ''
+  trigger:
+  - platform: sun
+    event: sunrise
+    offset: +00:10:00
+  condition: []
+  action:
+  - service: light.turn_on
+    data: {}
+    entity_id: light.terra_left_front_right
+  mode: single
+- id: '1607288034907'
+  alias: Terra left Light front-middle turn off
+  description: ''
+  trigger:
+  - platform: sun
+    event: sunset
+    offset: -00:05:00
+  condition: []
+  action:
+  - service: light.turn_off
+    data: {}
+    entity_id: light.terra_left_front_middle
+  mode: single
+- id: '1607288052252'
+  alias: Terra left Light front-right turn off
+  description: ''
+  trigger:
+  - platform: sun
+    event: sunset
+  condition: []
+  action:
+  - service: light.turn_off
+    data: {}
+    entity_id: light.terra_left_front_right
+  mode: single
+- id: '1607288115999'
+  alias: Terra right Light front-right turn on
+  description: ''
+  trigger:
+  - platform: sun
+    event: sunrise
+    offset: +00:10:00
+  condition: []
+  action:
+  - service: light.turn_on
+    data: {}
+    entity_id: light.terra_right_front_right
+  mode: single
+- id: '1607288134104'
+  alias: Terra right Light front-left turn on
+  description: ''
+  trigger:
+  - platform: sun
+    event: sunrise
+  condition: []
+  action:
+  - service: light.turn_on
+    data: {}
+    entity_id: light.terra_right_front_left
+  mode: single
+- id: '1607288150459'
+  alias: Terra right Light front-middle turn on
+  description: ''
+  trigger:
+  - platform: sun
+    event: sunrise
+    offset: +00:05:00
+  condition: []
+  action:
+  - service: light.turn_on
+    data: {}
+    entity_id: light.terra_right_front_middle
+  mode: single
+- id: '1607288212064'
+  alias: Terra right Light front-right turn off
+  description: ''
+  trigger:
+  - platform: sun
+    event: sunset
+  condition: []
+  action:
+  - service: light.turn_off
+    data: {}
+    entity_id: light.terra_right_front_right
+  mode: single
+- id: '1607288233551'
+  alias: Terra right Light front-middle turn off
+  description: ''
+  trigger:
+  - platform: sun
+    event: sunset
+    offset: -00:05:00
+  condition: []
+  action:
+  - service: light.turn_off
+    data: {}
+    entity_id: light.terra_right_front_middle
+  mode: single
+- id: '1607288250304'
+  alias: Terra right Light front-left turn off
+  description: ''
+  trigger:
+  - platform: sun
+    event: sunset
+    offset: -00:10:00
+  condition: []
+  action:
+  - service: light.turn_off
+    data: {}
+    entity_id: light.terra_right_front_left
+  mode: single
+- id: '1607289317563'
+  alias: Terra left Light back-left turn on
+  description: ''
+  trigger:
+  - platform: sun
+    event: sunrise
+    offset: +00:30:00
+  - type: value
+    platform: device
+    device_id: 8c4046f137e211ebb34d658684170f19
+    entity_id: sensor.terra_left_sensor_temperature_top
+    domain: sensor
+    below: 26
+  - type: value
+    platform: device
+    device_id: 8c4046f137e211ebb34d658684170f19
+    entity_id: sensor.terra_left_sensor_humidity_bottom
+    domain: sensor
+    below: 23
+  condition:
+  - type: is_value
+    condition: device
+    device_id: 8c4046f137e211ebb34d658684170f19
+    entity_id: sensor.terra_left_sensor_temperature_top
+    domain: sensor
+    below: 26
+  - type: is_value
+    condition: device
+    device_id: 8c4046f137e211ebb34d658684170f19
+    entity_id: sensor.terra_left_sensor_temperature_bottom
+    domain: sensor
+    below: 23
+  - condition: state
+    entity_id: light.terra_left_back_left
+    state: 'off'
+  - condition: sun
+    before: sunset
+    before_offset: -00:30:00
+    after: sunrise
+    after_offset: +00:30:00
+  action:
+  - service: light.turn_on
+    data: {}
+    entity_id: light.terra_left_back_left
+  mode: single
+- id: '1607289370922'
+  alias: Terra left Light back-right turn off
+  description: ''
+  trigger:
+  - platform: sun
+    event: sunset
+    offset: -00:30:00
+  - platform: state
+    entity_id: light.terra_left_back_right
+    for: 05:00:00
+    to: 'on'
+    from: 'off'
+  condition: []
+  action:
+  - service: light.turn_off
+    data: {}
+    entity_id: light.terra_left_back_right
+  mode: single
+- id: '1607290004011'
+  alias: Terra right Light back-left turn off
+  description: ''
+  trigger:
+  - platform: sun
+    event: sunset
+    offset: -00:30:00
+  - platform: state
+    entity_id: light.terra_right_back_left
+    for: 05:00:00
+    to: 'on'
+    from: 'off'
+  condition: []
+  action:
+  - service: light.turn_off
+    data: {}
+    entity_id: light.terra_right_back_left
+  mode: single
+- id: '1607290055329'
+  alias: Terra right Light back-left turn on
+  description: ''
+  trigger:
+  - platform: sun
+    event: sunrise
+    offset: +00:30:00
+  condition: []
+  action:
+  - service: light.turn_on
+    data: {}
+    entity_id: light.terra_right_back_left
+  mode: single
+- id: '1607292339769'
+  alias: Terra left Light back-left turn off (Sun)
+  description: ''
+  trigger:
+  - platform: sun
+    event: sunset
+    offset: -00:30:00
+  condition:
+  - condition: state
+    entity_id: light.terra_left_back_left
+    state: 'on'
+  action:
+  - service: light.turn_off
+    data: {}
+    entity_id: light.terra_left_back_left
+  mode: single
+- id: '1607292568219'
+  alias: Terra left Light back-left turn off (Temp)
+  description: ''
+  trigger:
+  - type: value
+    platform: device
+    device_id: 8c4046f137e211ebb34d658684170f19
+    entity_id: sensor.terra_left_sensor_temperature_top
+    domain: sensor
+    above: 28
+    below: 100
+  - type: value
+    platform: device
+    device_id: 8c4046f137e211ebb34d658684170f19
+    entity_id: sensor.terra_left_sensor_temperature_bottom
+    domain: sensor
+    above: 25
+    below: 100
+  condition:
+  - condition: state
+    entity_id: light.terra_left_back_left
+    state: 'on'
+    for: 00:15:00
+  action:
+  - service: light.turn_off
+    data: {}
+    entity_id: light.terra_left_back_left
+  mode: single
+- id: '1609108969938'
+  alias: Terra left Light back-right turn on
+  description: ''
+  trigger:
+  - platform: sun
+    event: sunrise
+    offset: +00:30:00
+  condition: []
+  action:
+  - service: light.turn_on
+    data: {}
+    entity_id: light.terra_left_back_right
+  mode: single
+- id: '1609110304985'
+  alias: Terra right Light back-middle turn off (Sun)
+  description: ''
+  trigger:
+  - platform: sun
+    event: sunset
+    offset: -00:30:00
+  condition:
+  - condition: state
+    entity_id: light.terra_right_back_middle
+    state: 'on'
+  action:
+  - service: light.turn_off
+    data: {}
+    entity_id: light.terra_right_back_middle
+  mode: single
+- id: '1609110364623'
+  alias: Terra right Light back-right turn off (Sun)
+  description: ''
+  trigger:
+  - platform: sun
+    event: sunset
+    offset: -00:30:00
+  condition:
+  - condition: state
+    entity_id: light.terra_right_back_right
+    state: 'on'
+  action:
+  - service: light.turn_off
+    data: {}
+    entity_id: light.terra_right_back_right
+  mode: single
+- id: '1609110722815'
+  alias: Terra right Light back-middle turn off (Temp)
+  description: ''
+  trigger:
+  - type: value
+    platform: device
+    device_id: f488db3737e311eba114bdffc4bccd5d
+    entity_id: sensor.terra_right_sensor_temperature_top
+    domain: sensor
+    below: 100
+    above: 27
+  - type: value
+    platform: device
+    device_id: f488db3737e311eba114bdffc4bccd5d
+    entity_id: sensor.terra_right_sensor_temperature_bottom
+    domain: sensor
+    below: 100
+    above: 24
+  condition:
+  - condition: state
+    entity_id: light.terra_right_back_middle
+    state: 'on'
+    for: 00:15:00
+  action:
+  - service: light.turn_off
+    data: {}
+    entity_id: light.terra_right_back_middle
+  mode: single
+- id: '1609110812141'
+  alias: Terra right Light back-right turn off (Temp)
+  description: ''
+  trigger:
+  - type: value
+    platform: device
+    device_id: f488db3737e311eba114bdffc4bccd5d
+    entity_id: sensor.terra_right_sensor_temperature_top
+    domain: sensor
+    below: 100
+    above: 27
+  - type: value
+    platform: device
+    device_id: f488db3737e311eba114bdffc4bccd5d
+    entity_id: sensor.terra_right_sensor_temperature_bottom
+    domain: sensor
+    below: 100
+    above: 24
+  condition:
+  - condition: state
+    entity_id: light.terra_right_back_right
+    state: 'on'
+    for: 00:15:00
+  action:
+  - service: light.turn_off
+    data: {}
+    entity_id: light.terra_right_back_right
+  mode: single
+- id: '1609111130300'
+  alias: Terra right Light back-middle turn on
+  description: ''
+  trigger:
+  - platform: sun
+    event: sunrise
+    offset: +00:30:00
+  - type: value
+    platform: device
+    device_id: f488db3737e311eba114bdffc4bccd5d
+    entity_id: sensor.terra_right_sensor_temperature_top
+    domain: sensor
+    below: 25
+  - type: value
+    platform: device
+    device_id: f488db3737e311eba114bdffc4bccd5d
+    entity_id: sensor.terra_right_sensor_temperature_bottom
+    domain: sensor
+    below: 22
+  condition:
+  - type: is_value
+    condition: device
+    device_id: f488db3737e311eba114bdffc4bccd5d
+    entity_id: sensor.terra_right_sensor_temperature_top
+    domain: sensor
+    below: 26
+  - type: is_value
+    condition: device
+    device_id: f488db3737e311eba114bdffc4bccd5d
+    entity_id: sensor.terra_right_sensor_temperature_bottom
+    domain: sensor
+    below: 23
+  - condition: state
+    entity_id: light.terra_right_back_middle
+    state: 'off'
+  - condition: sun
+    before: sunset
+    before_offset: -00:30:00
+    after: sunrise
+    after_offset: +00:30:00
+  action:
+  - service: light.turn_on
+    data: {}
+    entity_id: light.terra_right_back_middle
+  mode: single
+- id: '1609111179933'
+  alias: Terra right Light back-right turn on
+  description: ''
+  trigger:
+  - platform: sun
+    event: sunrise
+    offset: +00:30:00
+  - type: value
+    platform: device
+    device_id: f488db3737e311eba114bdffc4bccd5d
+    entity_id: sensor.terra_right_sensor_temperature_top
+    domain: sensor
+    below: 25
+  - type: value
+    platform: device
+    device_id: f488db3737e311eba114bdffc4bccd5d
+    entity_id: sensor.terra_right_sensor_temperature_bottom
+    domain: sensor
+    below: 22
+  condition:
+  - type: is_value
+    condition: device
+    device_id: f488db3737e311eba114bdffc4bccd5d
+    entity_id: sensor.terra_right_sensor_temperature_top
+    domain: sensor
+    below: 26
+  - type: is_value
+    condition: device
+    device_id: f488db3737e311eba114bdffc4bccd5d
+    entity_id: sensor.terra_right_sensor_temperature_bottom
+    domain: sensor
+    below: 23
+  - condition: state
+    entity_id: light.terra_right_back_right
+    state: 'off'
+  - condition: sun
+    before: sunset
+    before_offset: -00:30:00
+    after: sunrise
+    after_offset: +00:30:00
+  action:
+  - service: light.turn_on
+    data: {}
+    entity_id: light.terra_right_back_right
+  mode: single
